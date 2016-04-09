@@ -1,0 +1,15 @@
+# Python artifacts
+*.pyc
+
+# Virtual environments
+venv/
+
+# PyCharm IDE
+.idea/
+
+# Eclipse IDE
+.project
+.pydevproject
+
+# Mac directory info
+.DS_Store
