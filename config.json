@@ -1,4 +1,7 @@
 {
     "log-level": "debug",
-    "token": "*** REPLACE ***"
+    "token": "*** REPLACE ***",
+
+    "spotify-username": "*** REPLACE ***",
+    "spotify-password": "*** REPLACE ***"
 }
