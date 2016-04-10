@@ -1,2 +1,1 @@
--e git://github.com/Rapptz/discord.py.git@9f722731dda53e877b32cef7d52fb18bf3df7818#egg=discord.py-async
--e git://github.com/Hexxeh/spotify-websocket-api.git@d397ed2acfe436111816b4f937bf889eeddf5211#egg=spotify-websocket-api
+git+https://github.com/Rapptz/discord.py@async
