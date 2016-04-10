@@ -1,0 +1,2 @@
+# disco
+Discord music bot
