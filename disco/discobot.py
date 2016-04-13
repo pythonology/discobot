@@ -14,7 +14,7 @@ class DiscoBot(commands.Bot):
         self.service = None
 
     async def download_attachment(self, author, attachment):
-        path = 'attachments/' + author.name
+        path = os.path.join('attachments', author.name)
         if not os.path.exists(path):
             os.makedirs(path)
 
