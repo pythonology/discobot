@@ -1,6 +1,7 @@
 {
     "log-level": "debug",
     "token": "*** REPLACE ***",
+    "opus-library-path": "*** REPLACE ***",
 
     "spotify-username": "*** REPLACE ***",
     "spotify-password": "*** REPLACE ***"

@@ -4,6 +4,11 @@ import os
 from disco import bot, constants
 
 
+@bot.command(pass_context=True)
+async def join(ctx):
+    await bot.join_voice_channel(ctx.message.author.voice_channel)
+
+
 @bot.command()
 async def play(uri: str):
     # TODO: Use regular expressions when validating each URL.
