@@ -4,7 +4,7 @@
     "opus-library-path": "*** REPLACE ***",
 
     "spotify-username": "*** REPLACE ***",
-    "spotify-password": "*** REPLACE ***"
+    "spotify-password": "*** REPLACE ***",
 
     "playing-status": "Music"
 }
