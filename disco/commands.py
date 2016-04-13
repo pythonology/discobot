@@ -22,5 +22,6 @@ async def play(uri: str):
             return
 
         await bot.say("I can't do that yet.")
+        return
 
     await bot.say('Invalid URI.')
