@@ -13,3 +13,6 @@ venv/
 
 # Mac directory info
 .DS_Store
+
+# Project configuration
+config.json
