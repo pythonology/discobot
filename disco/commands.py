@@ -6,6 +6,10 @@ from disco import bot, constants
 
 @bot.command(pass_context=True)
 async def join(ctx):
+    if ctx.message.author.voice_channel is None:
+        return
+    if bot.voice is not None:
+        await bot.voice.disconnect()
     await bot.join_voice_channel(ctx.message.author.voice_channel)
 
 
