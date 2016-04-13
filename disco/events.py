@@ -1,9 +1,15 @@
 import re
 import os
 
-from discord import channel
+from discord import game, channel
 
-from disco import bot, constants, utils
+from disco import bot, config, constants, utils
+
+
+@bot.listen()
+async def on_ready():
+    playing_status = config.get('playing-status', 'Music')
+    await bot.change_status(game=game.Game(name=playing_status))
 
 
 @bot.listen()
