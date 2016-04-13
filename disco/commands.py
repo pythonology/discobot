@@ -1,6 +1,8 @@
 import re
 import os
 
+from discord import game
+
 from disco import bot, constants
 
 
@@ -30,7 +32,9 @@ async def play(uri: str):
             await bot.say('That attachment does not exist!')
             return
 
-        bot.play(path)
+        if bot.play(path, after=bot.change_status):
+            await bot.change_status(game=game.Game(name=filename))
+
         return
 
     await bot.say('Invalid URI.')
