@@ -3,6 +3,8 @@ import os
 
 from discord.ext import commands
 
+from disco import utils
+
 
 class DiscoBot(commands.Bot):
     def __init__(self, command_prefix, formatter=None, description=None,
@@ -35,4 +37,4 @@ class DiscoBot(commands.Bot):
                             break
                         f.write(chunk)
 
-        return 'disco://%s/%s' % (author.name, filename)
+        return utils.make_attachment_uri(author.name, filename)

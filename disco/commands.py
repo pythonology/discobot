@@ -22,10 +22,10 @@ async def play(uri: str):
 
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
-        author_name = match.group(1)
+        owner_name = match.group(1)
         filename = match.group(2)
 
-        path = os.path.join('attachments', author_name, filename)
+        path = os.path.join('attachments', owner_name, filename)
         if not os.path.exists(path):
             await bot.say('That attachment does not exist!')
             return
