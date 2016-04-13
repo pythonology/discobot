@@ -30,7 +30,8 @@ async def play(uri: str):
             await bot.say('That attachment does not exist!')
             return
 
-        await bot.say("I can't do that yet.")
+        bot.play(path)
+        await bot.say('Now playing: ' + filename)
         return
 
     await bot.say('Invalid URI.')

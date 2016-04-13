@@ -12,6 +12,11 @@ class DiscoBot(commands.Bot):
                               **options)
 
         self.service = None
+        self.player = None
+
+    def play(self, filename):
+        self.player = self.voice.create_ffmpeg_player(filename)
+        self.player.start()
 
     async def download_attachment(self, author, attachment):
         path = os.path.join('attachments', author.name)
