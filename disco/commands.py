@@ -62,6 +62,30 @@ async def play(uri: str):
     await bot.say('Invalid URI.')
 
 
+@bot.command()
+async def stop():
+    if not bot.is_voice_connected():
+        return
+    if bot.player is not None:
+        bot.player.stop()
+
+
+@bot.command()
+async def pause():
+    if not bot.is_voice_connected():
+        return
+    if bot.player is not None:
+        bot.player.pause()
+
+
+@bot.command()
+async def resume():
+    if not bot.is_voice_connected():
+        return
+    if bot.player is not None:
+        bot.player.resume()
+
+
 @bot.command(pass_context=True)
 async def aliases(ctx):
     aliases = {}
