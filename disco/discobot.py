@@ -1,9 +1,12 @@
+import logging
 import aiohttp
 import os
 
 from discord.ext import commands
 
-from disco import utils
+from disco import utils, soundcloud_client
+
+log = logging.getLogger(__name__)
 
 
 class DiscoBot(commands.Bot):
@@ -15,6 +18,22 @@ class DiscoBot(commands.Bot):
 
         self.service = None
         self.player = None
+
+    def create_soundcloud_player(self, url, **kwargs):
+        log.info('playing URL ' + url)
+
+        track = soundcloud_client.get('/resolve', url=url)
+        stream_url = soundcloud_client.get(
+            track.stream_url, allow_redirects=False)
+
+        player = self.voice.create_ffmpeg_player(stream_url.location, **kwargs)
+
+        player.stream_url = stream_url
+        player.url = url
+        player.uploader = track.label_name or track.user['username']
+        player.title = track.title
+
+        return player
 
     def play(self, player):
         if not self.is_voice_connected():

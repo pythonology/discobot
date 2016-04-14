@@ -32,6 +32,14 @@ async def play(uri: str):
 
         return
 
+    match = re.match(constants.RE_SOUNDCLOUD_URI, uri)
+    if match is not None:
+        player = bot.create_soundcloud_player(uri, after=after)
+        if bot.play(player):
+            await bot.change_status(game=game.Game(name=bot.player.title))
+
+        return
+
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
         discriminator = match.group(1)

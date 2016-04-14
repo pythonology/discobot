@@ -2,10 +2,9 @@ import json
 import logging
 
 import redis
+import soundcloud
 from discord import opus
 from discord.ext import commands
-
-from disco import discobot
 
 with open('config.json') as f:
     config = json.load(f)
@@ -19,8 +18,12 @@ redis_client = redis.StrictRedis(
     host=config['redis-host'], port=config['redis-port'],
     db=config['redis-db'])
 
+soundcloud_client = soundcloud.Client(client_id=config['soundcloud-client-id'])
+
 if not opus.is_loaded():
     opus.load_opus(config['opus-library-path'])
+
+from disco import discobot
 
 bot = discobot.DiscoBot(commands.when_mentioned)
 

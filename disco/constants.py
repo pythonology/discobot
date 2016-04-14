@@ -17,3 +17,15 @@ RE_YOUTUBE_URI = re.compile(
     '(?:&[^=]+=[^&]+)*'
     '$'
 )
+RE_SOUNDCLOUD_URI = re.compile(
+    '^'
+    '(?:https?:\/\/)'
+    '(?:www\.)?'
+    '(?:soundcloud\.com\/)'
+    '([A-Za-z0-9_-]+)'
+    '(?:\/)'
+    '([A-Za-z0-9_-]+)'
+    '(?:\/)?'
+    '(?:(?:\?|&)[^=]+=[^&]+)*'
+    '$'
+)
