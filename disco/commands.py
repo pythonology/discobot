@@ -42,7 +42,7 @@ async def play(uri: str):
             await bot.say('That attachment does not exist!')
             return
 
-        player = bot.voice.create_ffmpeg_player(filename, after=after)
+        player = bot.voice.create_ffmpeg_player(path, after=after)
         if bot.play(player):
             await bot.change_status(game=game.Game(name=filename))
 
