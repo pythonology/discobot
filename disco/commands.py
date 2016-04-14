@@ -17,6 +17,8 @@ async def join(ctx):
 
 @bot.command()
 async def play(uri: str):
+    after = lambda: bot.loop.create_task(bot.change_status(game=game.Game()))
+
     # TODO: Use regular expressions when validating each URL.
     if 'spotify' in uri:
         bot.service = constants.SPOTIFY_SERVICE
@@ -24,7 +26,8 @@ async def play(uri: str):
 
     match = re.match(constants.RE_YOUTUBE_URI, uri)
     if match is not None:
-        if await bot.play_youtube(uri, after=bot.change_status):
+        player = await bot.voice.create_ytdl_player(uri, after=after)
+        if bot.play(player):
             await bot.change_status(game=game.Game(name=bot.player.title))
 
         return
@@ -39,7 +42,8 @@ async def play(uri: str):
             await bot.say('That attachment does not exist!')
             return
 
-        if bot.play(path, after=bot.change_status):
+        player = bot.voice.create_ffmpeg_player(filename, after=after)
+        if bot.play(player):
             await bot.change_status(game=game.Game(name=filename))
 
         return

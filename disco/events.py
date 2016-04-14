@@ -7,11 +7,6 @@ from disco import bot, constants, utils, redis_client
 
 
 @bot.listen()
-async def on_ready():
-    await bot.change_status()
-
-
-@bot.listen()
 async def on_message(message):
     if message.author == bot.user:
         return
