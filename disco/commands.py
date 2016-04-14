@@ -17,6 +17,9 @@ async def join(ctx):
 
 @bot.command()
 async def play(uri: str):
+    if not bot.is_voice_connected():
+        return
+
     after = lambda: bot.loop.create_task(bot.change_status(game=game.Game()))
 
     # TODO: Use regular expressions when validating each URL.
