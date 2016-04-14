@@ -1,1 +1,2 @@
 git+https://github.com/Rapptz/discord.py@async
+redis==2.10.5

@@ -3,7 +3,7 @@ import os
 
 from discord import game
 
-from disco import bot, constants
+from disco import bot, constants, redis_client
 
 
 @bot.command(pass_context=True)
@@ -24,10 +24,10 @@ async def play(uri: str):
 
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
-        owner_name = match.group(1)
+        discriminator = match.group(1)
         filename = match.group(2)
 
-        path = os.path.join('attachments', owner_name, filename)
+        path = os.path.join('attachments', discriminator, filename)
         if not os.path.exists(path):
             await bot.say('That attachment does not exist!')
             return
@@ -38,3 +38,54 @@ async def play(uri: str):
         return
 
     await bot.say('Invalid URI.')
+
+
+@bot.command(pass_context=True)
+async def aliases(ctx):
+    aliases = {}
+    for alias in redis_client.smembers('aliases'):
+        alias = alias.decode('utf-8')
+        key = 'aliases:' + alias
+        if redis_client.hget(key, 'discriminator') != \
+                ctx.message.author.discriminator.encode('utf-8'):
+            continue
+        aliases[alias] = redis_client.hget(key, 'uri').decode('utf-8')
+
+    if not aliases:
+        await bot.say('No aliases found.')
+    else:
+        quote = ''
+        for key, value in aliases.items():
+            quote += '%s: %s\n' % (key, value)
+        await bot.say(quote.rstrip())
+
+
+@bot.command(pass_context=True)
+async def bind(ctx, alias: str, uri: str):
+    if alias.encode('utf-8') in redis_client.smembers('aliases'):
+        await bot.say('That alias is already taken!')
+        return
+
+    redis_client.sadd('aliases', alias)
+    redis_client.hmset(
+        'aliases:' + alias,
+        {'discriminator': ctx.message.author.discriminator, 'uri': uri})
+    await bot.say('Done! The alias %s may now be used.' % alias)
+
+
+@bot.command(pass_context=True)
+async def unbind(ctx, alias: str):
+    if alias.encode('utf-8') not in redis_client.smembers('aliases'):
+        await bot.say('That alias does not exist!')
+        return
+
+    key = 'aliases:' + alias
+    if redis_client.hget(key, 'discriminator') != \
+            ctx.message.author.discriminator.encode('utf-8'):
+        await bot.say('You did not create that alias.')
+        return
+
+    redis_client.srem('aliases', alias)
+    redis_client.hdel(key, 'discriminator')
+    redis_client.hdel(key, 'uri')
+    await bot.say('Successfully deleted the alias %s.' % alias)

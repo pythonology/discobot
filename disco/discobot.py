@@ -26,7 +26,7 @@ class DiscoBot(commands.Bot):
         return True
 
     async def download_attachment(self, author, attachment):
-        path = os.path.join('attachments', author.name)
+        path = os.path.join('attachments', author.discriminator)
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -42,4 +42,4 @@ class DiscoBot(commands.Bot):
                             break
                         f.write(chunk)
 
-        return utils.make_attachment_uri(author.name, filename)
+        return utils.make_attachment_uri(author.discriminator, filename)

@@ -3,7 +3,7 @@ import os
 
 from discord import channel
 
-from disco import bot, constants, utils
+from disco import bot, constants, utils, redis_client
 
 
 @bot.listen()
@@ -20,11 +20,12 @@ async def on_message(message):
         if not message.attachments:
             match = re.match(constants.RE_ATTACHMENT_URI, message.content)
             if match is not None:
-                owner_name = match.group(1)
+                discriminator = match.group(1)
                 filename = match.group(2)
 
-                path = os.path.join('attachments', owner_name, filename)
-                if message.author.name == owner_name and os.path.exists(path):
+                path = os.path.join('attachments', discriminator, filename)
+                if message.author.discriminator == discriminator and \
+                        os.path.exists(path):
                     await bot.send_message(
                         message.channel, 'Deleting %s...' % filename)
                     os.remove(path)
@@ -34,11 +35,11 @@ async def on_message(message):
                     return
 
             uris = []
-            path = os.path.join('attachments', message.author.name)
+            path = os.path.join('attachments', message.author.discriminator)
             if os.path.exists(path):
                 for filename in os.listdir(path):
                     uri = utils.make_attachment_uri(
-                        message.author.name, filename)
+                        message.author.discriminator, filename)
                     uris.append(uri)
             quote = 'That attachment does not exist!\n\nIf you wish to ' \
                     'delete one of your submitted attachments, you must ' \
@@ -70,3 +71,8 @@ async def on_message(message):
                 message.channel,
                 'Done! To play this attachment, use: %s play %s' %
                 (bot.user.mention, uri))
+    else:
+        if message.content.encode('utf-8') in redis_client.smembers('aliases'):
+            uri = redis_client.hget('aliases:' + message.content, 'uri')
+            message.content = bot.user.mention + ' play ' + uri.decode('utf-8')
+            await bot.process_commands(message)
