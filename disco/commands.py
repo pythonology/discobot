@@ -22,6 +22,13 @@ async def play(uri: str):
         bot.service = constants.SPOTIFY_SERVICE
         return
 
+    match = re.match(constants.RE_YOUTUBE_URI, uri)
+    if match is not None:
+        if await bot.play_youtube(uri, after=bot.change_status):
+            await bot.change_status(game=game.Game(name=bot.player.title))
+
+        return
+
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
         discriminator = match.group(1)

@@ -25,6 +25,15 @@ class DiscoBot(commands.Bot):
         self.player.start()
         return True
 
+    async def play_youtube(self, uri, after=None):
+        if not self.is_voice_connected():
+            return False
+        if self.player is not None and self.player.is_playing():
+            self.player.stop()
+        self.player = await self.voice.create_ytdl_player(uri, after=after)
+        self.player.start()
+        return True
+
     async def download_attachment(self, author, attachment):
         path = os.path.join('attachments', author.discriminator)
         if not os.path.exists(path):

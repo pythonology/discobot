@@ -8,3 +8,12 @@ VALID_ATTACHMENT_TYPES = ('.opus', '.weba', '.ogg', '.wav', '.mp3', '.flac',
 
 # Regular expressions
 RE_ATTACHMENT_URI = re.compile('^disco:\/\/(\d*)\/(.*)$')
+RE_YOUTUBE_URI = re.compile(
+    '^'
+    '(?:https?:\/\/)'
+    '(?:www\.)?'
+    '(?:youtu(?:be\.com\/watch\?v=|\.be\/))'
+    '([A-Za-z0-9_-]{11})'
+    '(?:&[^=]+=[^&]+)*'
+    '$'
+)
