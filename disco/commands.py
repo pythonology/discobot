@@ -108,6 +108,10 @@ async def aliases(ctx):
 
 @bot.command(pass_context=True)
 async def bind(ctx, alias: str, uri: str):
+    if not alias or ' ' in alias or alias.startswith('<@'):
+        await bot.say('Invalid alias.')
+        return
+
     if alias.encode('utf-8') in redis_client.smembers('aliases'):
         await bot.say('That alias is already taken!')
         return
