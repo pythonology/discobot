@@ -3,7 +3,7 @@ import os
 
 from discord import game
 
-from disco import bot, constants, redis_client
+from disco import bot, constants, config, redis_client
 
 
 @bot.command(pass_context=True)
@@ -22,29 +22,12 @@ async def play(uri: str):
 
     after = lambda: bot.loop.create_task(bot.change_status(game=game.Game()))
 
-    # TODO: Use regular expressions when validating each URL.
-    if 'spotify' in uri:
-        bot.service = constants.SPOTIFY_SERVICE
-        return
-
-    match = re.match(constants.RE_YOUTUBE_URI, uri)
-    if match is not None:
-        player = await bot.voice.create_ytdl_player(uri, after=after)
-        if bot.play(player):
-            await bot.change_status(game=game.Game(name=bot.player.title))
-
-        return
-
-    match = re.match(constants.RE_SOUNDCLOUD_URI, uri)
-    if match is not None:
-        player = bot.create_soundcloud_player(uri, after=after)
-        if bot.play(player):
-            await bot.change_status(game=game.Game(name=bot.player.title))
-
-        return
-
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
+        if not config['attachments']['enabled']:
+            await bot.say('Support for attachments is currently disabled.')
+            return
+
         discriminator = match.group(1)
         filename = match.group(2)
 
@@ -53,10 +36,25 @@ async def play(uri: str):
             await bot.say('That attachment does not exist!')
             return
 
-        player = bot.voice.create_ffmpeg_player(path, after=after)
-        if bot.play(player):
-            await bot.change_status(game=game.Game(name=filename))
+        await bot.play_attachment(path, after=after)
+        return
 
+    match = re.match(constants.RE_YOUTUBE_URL, uri)
+    if match is not None:
+        if not config['youtube']['enabled']:
+            await bot.say('Support for YouTube is currently disabled.')
+            return
+
+        await bot.play_youtube(uri, after=after)
+        return
+
+    match = re.match(constants.RE_SOUNDCLOUD_URL, uri)
+    if match is not None:
+        if not config['soundcloud']['enabled']:
+            await bot.say('Support for Soundcloud is currently disabled.')
+            return
+
+        await bot.play_soundcloud(uri, after=after)
         return
 
     await bot.say('Invalid URI.')

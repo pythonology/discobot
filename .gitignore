@@ -14,5 +14,5 @@ venv/
 # Mac directory info
 .DS_Store
 
-# Project configuration
-config.json
+# DISCO configuration
+config.yml

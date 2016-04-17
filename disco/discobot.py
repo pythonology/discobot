@@ -3,6 +3,7 @@ import aiohttp
 import os
 
 from discord.ext import commands
+from discord import game
 
 from disco import utils, soundcloud_client
 
@@ -16,7 +17,6 @@ class DiscoBot(commands.Bot):
                               description=description, pm_help=pm_help,
                               **options)
 
-        self.service = None
         self.player = None
 
     def create_soundcloud_player(self, url, **kwargs):
@@ -44,6 +44,22 @@ class DiscoBot(commands.Bot):
         self.player = player
         self.player.start()
         return True
+
+    async def play_attachment(self, path, after=None):
+        player = self.voice.create_ffmpeg_player(path, after=after)
+        if self.play(player):
+            basename = os.path.basename(path)
+            await self.change_status(game=game.Game(name=basename))
+
+    async def play_youtube(self, url, after=None):
+        player = await self.voice.create_ytdl_player(url, after=after)
+        if self.play(player):
+            await self.change_status(game=game.Game(name=self.player.title))
+
+    async def play_soundcloud(self, url, after=None):
+        player = self.create_soundcloud_player(url, after=after)
+        if self.play(player):
+            await self.change_status(game=game.Game(name=self.player.title))
 
     async def download_attachment(self, author, attachment):
         path = os.path.join('attachments', author.discriminator)

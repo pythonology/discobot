@@ -1,0 +1,29 @@
+opus_library_path: "*** REPLACE ***"
+
+log:
+    format: "%(asctime)s ::%(levelname)s:: %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+    level: "info"
+
+bot:
+    token: "*** REPLACE ***"
+
+redis:
+    host: "127.0.0.1"
+    port: 6379
+    db: 0
+
+attachments:
+    enabled: true
+
+youtube:
+    enabled: true
+
+soundcloud:
+    enabled: true
+    client_id: "*** REPLACE ***"
+
+spotify:
+    enabled: false
+    username: "*** REPLACE ***"
+    password: "*** REPLACE ***"
