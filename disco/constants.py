@@ -9,7 +9,7 @@ RE_ATTACHMENT_URI = re.compile(
     '(?:disco:\/\/)'
     '(\d+)'
     '(?:\/)'
-    '([\w-]+)'
+    '([\w\-\.]+)'
     '$'
 )
 RE_YOUTUBE_URL = re.compile(
