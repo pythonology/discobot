@@ -1,11 +1,12 @@
 import logging
 import aiohttp
 import os
+import re
 
 from discord.ext import commands
 from discord import game
 
-from disco import utils, soundcloud_client
+from disco import utils, soundcloud_client, constants
 
 log = logging.getLogger(__name__)
 
@@ -79,3 +80,22 @@ class DiscoBot(commands.Bot):
                         f.write(chunk)
 
         return utils.make_attachment_uri(author.discriminator, filename)
+
+    def delete_attachment(self, uri):
+        match = re.match(constants.RE_ATTACHMENT_URI, uri)
+        if match is None:
+            return False
+
+        discriminator = match.group(1)
+        filename = match.group(2)
+
+        path = os.path.join('attachments', discriminator, filename)
+        if not os.path.exists(path):
+            return False
+
+        os.remove(path)
+        dirname = os.path.dirname(path)
+        if not os.listdir(dirname):
+            os.rmdir(dirname)
+
+        return True

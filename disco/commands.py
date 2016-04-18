@@ -8,6 +8,7 @@ from disco import bot, constants, config, redis_client
 
 @bot.command(pass_context=True)
 async def join(ctx):
+    """Tells DISCO to join your current channel."""
     if ctx.message.author.voice_channel is None:
         return
     if bot.voice is not None:
@@ -17,6 +18,7 @@ async def join(ctx):
 
 @bot.command()
 async def play(uri: str):
+    """Plays the track of your choice."""
     if not bot.is_voice_connected():
         return
 
@@ -24,7 +26,7 @@ async def play(uri: str):
 
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
-        if not config['attachments']['enabled']:
+        if not config.get('attachments', {}).get('enabled', False):
             await bot.say('Support for attachments is currently disabled.')
             return
 
@@ -41,7 +43,7 @@ async def play(uri: str):
 
     match = re.match(constants.RE_YOUTUBE_URL, uri)
     if match is not None:
-        if not config['youtube']['enabled']:
+        if not config.get('youtube', {}).get('enabled', False):
             await bot.say('Support for YouTube is currently disabled.')
             return
 
@@ -50,8 +52,8 @@ async def play(uri: str):
 
     match = re.match(constants.RE_SOUNDCLOUD_URL, uri)
     if match is not None:
-        if not config['soundcloud']['enabled']:
-            await bot.say('Support for Soundcloud is currently disabled.')
+        if not config.get('soundcloud', {}).get('enabled', False):
+            await bot.say('Support for SoundCloud is currently disabled.')
             return
 
         await bot.play_soundcloud(uri, after=after)
@@ -62,6 +64,7 @@ async def play(uri: str):
 
 @bot.command()
 async def stop():
+    """Stops the currently playing track."""
     if not bot.is_voice_connected():
         return
     if bot.player is not None:
@@ -70,6 +73,7 @@ async def stop():
 
 @bot.command()
 async def pause():
+    """Pauses the currently playing track."""
     if not bot.is_voice_connected():
         return
     if bot.player is not None:
@@ -78,6 +82,7 @@ async def pause():
 
 @bot.command()
 async def resume():
+    """Resumes the currently playing track."""
     if not bot.is_voice_connected():
         return
     if bot.player is not None:
@@ -86,6 +91,7 @@ async def resume():
 
 @bot.command(pass_context=True)
 async def aliases(ctx):
+    """Lists all aliases created by you."""
     aliases = {}
     for alias in redis_client.smembers('aliases'):
         alias = alias.decode('utf-8')
@@ -106,6 +112,7 @@ async def aliases(ctx):
 
 @bot.command(pass_context=True)
 async def bind(ctx, alias: str, uri: str):
+    """Registers an alias."""
     if re.match(constants.RE_ALIAS, alias) is None:
         await bot.say('Invalid alias.')
         return
@@ -123,6 +130,7 @@ async def bind(ctx, alias: str, uri: str):
 
 @bot.command(pass_context=True)
 async def unbind(ctx, alias: str):
+    """Unbinds a registered alias."""
     if alias.encode('utf-8') not in redis_client.smembers('aliases'):
         await bot.say('That alias does not exist!')
         return
