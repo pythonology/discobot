@@ -9,7 +9,7 @@ RE_ATTACHMENT_URI = re.compile(
     '(?:disco:\/\/)'
     '(\d+)'
     '(?:\/)'
-    '([^\/]+)'
+    '([\w-]+)'
     '$'
 )
 RE_YOUTUBE_URL = re.compile(
@@ -17,8 +17,8 @@ RE_YOUTUBE_URL = re.compile(
     '(?:https?:\/\/)'
     '(?:www\.)?'
     '(?:youtu(?:be\.com\/watch\?v=|\.be\/))'
-    '([A-Za-z0-9_-]{11})'
-    '(?:&[^=]+=[^&]+)*'
+    '([\w-]{11})'
+    '(?:&(?:[^=]+=[^&])+)?'
     '$'
 )
 RE_SOUNDCLOUD_URL = re.compile(
@@ -26,11 +26,11 @@ RE_SOUNDCLOUD_URL = re.compile(
     '(?:https?:\/\/)'
     '(?:www\.)?'
     '(?:soundcloud\.com\/)'
-    '([A-Za-z0-9_-]+)'
+    '([\w-]+)'
     '(?:\/)'
-    '([A-Za-z0-9_-]+)'
+    '([\w-]+)'
     '(?:\/)?'
-    '(?:(?:\?|&)[^=]+=[^&]+)*'
+    '(?:\?(?:[^=]+=[^&])+)?'
     '$'
 )
 RE_ALIAS = re.compile(
