@@ -106,7 +106,7 @@ async def aliases(ctx):
 
 @bot.command(pass_context=True)
 async def bind(ctx, alias: str, uri: str):
-    if not alias or ' ' in alias or alias.startswith('<@'):
+    if re.match(constants.RE_ALIAS, alias) is None:
         await bot.say('Invalid alias.')
         return
 

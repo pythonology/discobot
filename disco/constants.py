@@ -33,3 +33,10 @@ RE_SOUNDCLOUD_URL = re.compile(
     '(?:(?:\?|&)[^=]+=[^&]+)*'
     '$'
 )
+RE_ALIAS = re.compile(
+    '^'
+    '(?!<@)'
+    '([^\w\s])'
+    '([^\s]+)'
+    '$'
+)
