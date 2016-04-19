@@ -14,10 +14,10 @@ def main():
     """
     The main entry point.
 
-    Invoke using either `disco` or `python -m disco`.
+    Invoke using either `discobot` or `python -m discobot`.
     """
     parser = argparse.ArgumentParser(
-        prog='disco', description=__doc__,
+        prog='discobot', description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         'config', nargs='?', type=argparse.FileType('r'),
