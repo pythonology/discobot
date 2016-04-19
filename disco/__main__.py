@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Disco: a fully-featured music bot for Discord"""
+"""A fully-featured music bot for Discord."""
 
 import argparse
 import yaml
@@ -9,7 +9,13 @@ from discord import opus
 
 from disco import bot
 
-if __name__ == '__main__':
+
+def main():
+    """
+    The main entry point.
+
+    Invoke using either `disco` or `python -m disco`.
+    """
     parser = argparse.ArgumentParser(
         prog='disco', description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -30,3 +36,7 @@ if __name__ == '__main__':
 
     bot.configure(config)
     bot.run(config['bot']['token'])
+
+
+if __name__ == '__main__':
+    main()
