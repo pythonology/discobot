@@ -7,9 +7,9 @@ __license__ = 'MIT'
 
 from discord.ext import commands
 
-from discobot import discobot
+from discobot import bot
 
-bot = discobot.DiscoBot(commands.when_mentioned)
+bot = bot.DiscoBot(commands.when_mentioned)
 
 import discobot.events
 import discobot.commands
