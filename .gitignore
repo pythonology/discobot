@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 
 # Distribution / packaging
+dist/
 *.egg-info/
 
 # Virtual environments
