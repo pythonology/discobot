@@ -3,15 +3,15 @@ import os
 
 from discord import game
 
-from disco import bot, constants, config, redis_client
+from disco import bot, constants
 
 
 @bot.command(pass_context=True)
 async def join(ctx):
-    """Tells DISCO to join your current channel."""
+    """Makes Disco join your current voice channel."""
     if ctx.message.author.voice_channel is None:
         return
-    if bot.voice is not None:
+    if bot.is_voice_connected():
         await bot.voice.disconnect()
     await bot.join_voice_channel(ctx.message.author.voice_channel)
 
@@ -26,13 +26,12 @@ async def play(uri: str):
 
     match = re.match(constants.RE_ATTACHMENT_URI, uri)
     if match is not None:
-        if not config.get('attachments', {}).get('enabled', False):
+        if not bot.config['attachments']['enabled']:
             await bot.say('Support for attachments is currently disabled.')
             return
 
         discriminator = match.group(1)
         filename = match.group(2)
-
         path = os.path.join('attachments', discriminator, filename)
         if not os.path.exists(path):
             await bot.say('That attachment does not exist!')
@@ -43,7 +42,7 @@ async def play(uri: str):
 
     match = re.match(constants.RE_YOUTUBE_URL, uri)
     if match is not None:
-        if not config.get('youtube', {}).get('enabled', False):
+        if not bot.config['youtube']['enabled']:
             await bot.say('Support for YouTube is currently disabled.')
             return
 
@@ -52,7 +51,7 @@ async def play(uri: str):
 
     match = re.match(constants.RE_SOUNDCLOUD_URL, uri)
     if match is not None:
-        if not config.get('soundcloud', {}).get('enabled', False):
+        if not bot.config['soundcloud']['enabled']:
             await bot.say('Support for SoundCloud is currently disabled.')
             return
 
@@ -93,13 +92,13 @@ async def resume():
 async def aliases(ctx):
     """Lists all aliases created by you."""
     aliases = {}
-    for alias in redis_client.smembers('aliases'):
+    for alias in bot.redis.smembers('aliases'):
         alias = alias.decode('utf-8')
         key = 'aliases:' + alias
-        if redis_client.hget(key, 'discriminator') != \
+        if bot.redis.hget(key, 'discriminator') != \
                 ctx.message.author.discriminator.encode('utf-8'):
             continue
-        aliases[alias] = redis_client.hget(key, 'uri').decode('utf-8')
+        aliases[alias] = bot.redis.hget(key, 'uri').decode('utf-8')
 
     if not aliases:
         await bot.say('No aliases found.')
@@ -112,17 +111,17 @@ async def aliases(ctx):
 
 @bot.command(pass_context=True)
 async def bind(ctx, alias: str, uri: str):
-    """Registers an alias."""
+    """Binds an alias to the track of your choice."""
     if re.match(constants.RE_ALIAS, alias) is None:
         await bot.say('Invalid alias.')
         return
 
-    if alias.encode('utf-8') in redis_client.smembers('aliases'):
+    if alias.encode('utf-8') in bot.redis.smembers('aliases'):
         await bot.say('That alias is already taken!')
         return
 
-    redis_client.sadd('aliases', alias)
-    redis_client.hmset(
+    bot.redis.sadd('aliases', alias)
+    bot.redis.hmset(
         'aliases:' + alias,
         {'discriminator': ctx.message.author.discriminator, 'uri': uri})
     await bot.say('Done! The alias %s may now be used.' % alias)
@@ -130,18 +129,18 @@ async def bind(ctx, alias: str, uri: str):
 
 @bot.command(pass_context=True)
 async def unbind(ctx, alias: str):
-    """Unbinds a registered alias."""
-    if alias.encode('utf-8') not in redis_client.smembers('aliases'):
+    """Unbinds an alias."""
+    if alias.encode('utf-8') not in bot.redis.smembers('aliases'):
         await bot.say('That alias does not exist!')
         return
 
     key = 'aliases:' + alias
-    if redis_client.hget(key, 'discriminator') != \
+    if bot.redis.hget(key, 'discriminator') != \
             ctx.message.author.discriminator.encode('utf-8'):
         await bot.say('You did not create that alias.')
         return
 
-    redis_client.srem('aliases', alias)
-    redis_client.hdel(key, 'discriminator')
-    redis_client.hdel(key, 'uri')
+    bot.redis.srem('aliases', alias)
+    bot.redis.hdel(key, 'discriminator')
+    bot.redis.hdel(key, 'uri')
     await bot.say('Successfully deleted the alias %s.' % alias)

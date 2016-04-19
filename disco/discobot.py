@@ -1,3 +1,5 @@
+import redis
+import soundcloud
 import logging
 import aiohttp
 import os
@@ -6,7 +8,7 @@ import re
 from discord.ext import commands
 from discord import game
 
-from disco import utils, soundcloud_client, constants
+from disco import utils, constants
 
 log = logging.getLogger(__name__)
 
@@ -15,13 +17,28 @@ class DiscoBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.config = {}
+        self.redis = None
+        self.soundcloud = None
         self.player = None
 
-    def _create_soundcloud_player(self, url, **kwargs):
+    def configure(self, config):
+        self.config = config
+
+        self.command_prefix = config['bot']['command_prefix']
+        if len(self.command_prefix) > 1:
+            self.command_prefix = eval(self.command_prefix)
+
+        self.redis = redis.StrictRedis(**config['redis'])
+
+        if config['soundcloud']['enabled']:
+            self.soundcloud = soundcloud.Client(**config['soundcloud'])
+
+    def create_soundcloud_player(self, url, **kwargs):
         log.info('playing URL ' + url)
 
-        track = soundcloud_client.get('/resolve', url=url)
-        stream_url = soundcloud_client.get(
+        track = self.soundcloud.get('/resolve', url=url)
+        stream_url = self.soundcloud.get(
             track.stream_url, allow_redirects=False)
 
         player = self.voice.create_ffmpeg_player(stream_url.location, **kwargs)
@@ -31,7 +48,7 @@ class DiscoBot(commands.Bot):
         player.title = track.title
         return player
 
-    def _play(self, player):
+    def play(self, player):
         if not self.is_voice_connected():
             return False
         if self.player is not None and self.player.is_playing():
@@ -43,18 +60,18 @@ class DiscoBot(commands.Bot):
 
     async def play_attachment(self, path, after=None):
         player = self.voice.create_ffmpeg_player(path, after=after)
-        if self._play(player):
+        if self.play(player):
             basename = os.path.basename(path)
             await self.change_status(game=game.Game(name=basename))
 
     async def play_youtube(self, url, after=None):
         player = await self.voice.create_ytdl_player(url, after=after)
-        if self._play(player):
+        if self.play(player):
             await self.change_status(game=game.Game(name=self.player.title))
 
     async def play_soundcloud(self, url, after=None):
-        player = self._create_soundcloud_player(url, after=after)
-        if self._play(player):
+        player = self.create_soundcloud_player(url, after=after)
+        if self.play(player):
             await self.change_status(game=game.Game(name=self.player.title))
 
     async def download_attachment(self, author, attachment):

@@ -14,5 +14,5 @@ venv/
 # Mac directory info
 .DS_Store
 
-# DISCO configuration
-config.yml
+# Disco configuration
+config.yaml

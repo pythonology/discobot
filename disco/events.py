@@ -3,7 +3,7 @@ import os
 
 from discord import channel
 
-from disco import bot, config, constants, utils, redis_client
+from disco import bot, constants, utils
 
 
 @bot.listen()
@@ -14,7 +14,7 @@ async def on_message(message):
 
     # Private messages are used only for managing attachments.
     if isinstance(message.channel, channel.PrivateChannel):
-        if not config.get('attachments', {}).get('enabled', False):
+        if not bot.config['attachments']['enabled']:
             await bot.send_message(
                 message.channel,
                 'Support for attachments is currently disabled.')
@@ -76,8 +76,8 @@ async def on_message(message):
                 (bot.user.mention, uri))
     else:
         # The user may be trying to use an alias.
-        if message.content.encode('utf-8') in redis_client.smembers('aliases'):
-            uri = redis_client.hget('aliases:' + message.content, 'uri')
+        if message.content.encode('utf-8') in bot.redis.smembers('aliases'):
+            uri = bot.redis.hget('aliases:' + message.content, 'uri')
 
             # Overwrite message.content so that we can invoke the play
             # command without doing too much extra work.
