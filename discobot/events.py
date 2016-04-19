@@ -3,7 +3,7 @@ import os
 
 from discord import channel
 
-from disco import bot, constants, utils
+from discobot import bot, constants, utils
 
 
 @bot.listen()

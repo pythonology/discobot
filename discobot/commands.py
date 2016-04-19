@@ -3,7 +3,7 @@ import os
 
 from discord import game
 
-from disco import bot, constants
+from discobot import bot, constants
 
 
 @bot.command(pass_context=True)

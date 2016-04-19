@@ -8,7 +8,7 @@ import re
 from discord.ext import commands
 from discord import game
 
-from disco import utils, constants
+from discobot import utils, constants
 
 log = logging.getLogger(__name__)
 

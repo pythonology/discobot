@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from setuptools import setup, find_packages
 
-import disco
+import discobot
 
 with open('README.md') as f:
     long_description = f.read()
@@ -16,12 +16,12 @@ with open('requirements.txt') as f:
             install_requires.append(line)
 
 setup(
-    name='discobot',
-    version=disco.__version__,
-    description=disco.__doc__.strip(),
+    name='DiscoBot',
+    version=discobot.__version__,
+    description=discobot.__doc__.strip(),
     long_description=long_description,
-    author=disco.__author__,
-    maintainer=disco.__maintainer__,
+    author=discobot.__author__,
+    maintainer=discobot.__maintainer__,
     download_url='https://github.com/chandler14362/disco',
     packages=find_packages(),
     classifiers=[
@@ -38,11 +38,11 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.5'
     ],
-    license=disco.__license__,
+    license=discobot.__license__,
     install_requires=install_requires,
     entry_points={
         'console_scripts': [
-            'disco = disco.__main__:main',
+            'discobot = discobot.__main__:main',
         ],
     },
     dependency_links=dependency_links

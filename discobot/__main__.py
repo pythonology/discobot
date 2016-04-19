@@ -7,7 +7,7 @@ import logging
 
 from discord import opus
 
-from disco import bot
+from discobot import bot
 
 
 def main():
