@@ -16,7 +16,7 @@ with open('requirements.txt') as f:
             install_requires.append(line)
 
 setup(
-    name='disco',
+    name='discobot',
     version=disco.__version__,
     description=disco.__doc__.strip(),
     long_description=long_description,
