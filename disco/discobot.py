@@ -12,15 +12,12 @@ log = logging.getLogger(__name__)
 
 
 class DiscoBot(commands.Bot):
-    def __init__(self, command_prefix, formatter=None, description=None,
-                 pm_help=False, **options):
-        commands.Bot.__init__(self, command_prefix, formatter=formatter,
-                              description=description, pm_help=pm_help,
-                              **options)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.player = None
 
-    def create_soundcloud_player(self, url, **kwargs):
+    def _create_soundcloud_player(self, url, **kwargs):
         log.info('playing URL ' + url)
 
         track = soundcloud_client.get('/resolve', url=url)
@@ -28,15 +25,13 @@ class DiscoBot(commands.Bot):
             track.stream_url, allow_redirects=False)
 
         player = self.voice.create_ffmpeg_player(stream_url.location, **kwargs)
-
-        player.stream_url = stream_url
+        player.stream_url = stream_url.location
         player.url = url
         player.uploader = track.label_name or track.user['username']
         player.title = track.title
-
         return player
 
-    def play(self, player):
+    def _play(self, player):
         if not self.is_voice_connected():
             return False
         if self.player is not None and self.player.is_playing():
@@ -48,18 +43,18 @@ class DiscoBot(commands.Bot):
 
     async def play_attachment(self, path, after=None):
         player = self.voice.create_ffmpeg_player(path, after=after)
-        if self.play(player):
+        if self._play(player):
             basename = os.path.basename(path)
             await self.change_status(game=game.Game(name=basename))
 
     async def play_youtube(self, url, after=None):
         player = await self.voice.create_ytdl_player(url, after=after)
-        if self.play(player):
+        if self._play(player):
             await self.change_status(game=game.Game(name=self.player.title))
 
     async def play_soundcloud(self, url, after=None):
-        player = self.create_soundcloud_player(url, after=after)
-        if self.play(player):
+        player = self._create_soundcloud_player(url, after=after)
+        if self._play(player):
             await self.change_status(game=game.Game(name=self.player.title))
 
     async def download_attachment(self, author, attachment):
