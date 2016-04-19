@@ -7,7 +7,13 @@ with open('README.md') as f:
     long_description = f.read()
 
 with open('requirements.txt') as f:
-    install_requires = f.read()
+    install_requires = []
+    dependency_links = []
+    for line in f.read().splitlines():
+        if line.startswith('git+'):
+            dependency_links.append(line)
+        else:
+            install_requires.append(line)
 
 setup(
     name='disco',
@@ -38,5 +44,6 @@ setup(
         'console_scripts': [
             'disco = disco.__main__:main',
         ],
-    }
+    },
+    dependency_links=dependency_links
 )

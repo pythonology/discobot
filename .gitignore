@@ -1,5 +1,9 @@
 # Python artifacts
+__pycache__/
 *.pyc
+
+# Distribution / packaging
+*.egg-info/
 
 # Virtual environments
 venv/
