@@ -1,1 +1,1 @@
-# Disco: a fully-featured music bot for discord
+# Disco: a fully-featured music bot for Discord
