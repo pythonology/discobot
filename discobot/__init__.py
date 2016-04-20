@@ -1,7 +1,7 @@
 """A fully-featured music bot for Discord."""
 
 __version__ = '0.4.0'
-__author__ = 'Chan, Pythonology'
+__author__ = 'Pythonology, Chan'
 __maintainer__ = 'Pythonology'
 __license__ = 'MIT'
 

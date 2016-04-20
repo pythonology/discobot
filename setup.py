@@ -1,28 +1,36 @@
 #!/usr/bin/env python3
-from setuptools import setup, find_packages
+import re
 
-import discobot
+from setuptools import setup, find_packages
 
 with open('README.rst') as f:
     long_description = f.read()
 
 with open('requirements.txt') as f:
-    install_requires = []
-    dependency_links = []
-    for line in f.read().splitlines():
-        if line.startswith('git+'):
-            dependency_links.append(line)
-        else:
-            install_requires.append(line)
+    install_requires = f.read().splitlines()
+    for install_require in install_requires[:]:
+        if install_require.startswith('git+'):
+            install_requires.remove(install_require)
+
+with open('discobot/__init__.py') as f:
+    data = f.read()
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        data, re.MULTILINE).group(1)
+    author = re.search(r'^__author__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                       data, re.MULTILINE).group(1)
+    maintainer = re.search(r'^__maintainer__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                           data, re.MULTILINE).group(1)
+    license = re.search(r'^__license__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        data, re.MULTILINE).group(1)
 
 setup(
-    name='DiscoBot',
-    version=discobot.__version__,
-    description=discobot.__doc__.strip(),
+    name='Discobot',
+    version=version,
+    description='A fully-featured music bot for Discord.',
     long_description=long_description,
-    author=discobot.__author__,
-    maintainer=discobot.__maintainer__,
-    download_url='https://github.com/chandler14362/disco',
+    author=author,
+    maintainer=maintainer,
+    url='https://github.com/chandler14362/disco',
     packages=find_packages(),
     classifiers=[
         'Topic :: Communications :: Chat',
@@ -38,12 +46,11 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.5'
     ],
-    license=discobot.__license__,
+    license=license,
     install_requires=install_requires,
     entry_points={
         'console_scripts': [
-            'discobot = discobot.__main__:main',
-        ],
-    },
-    dependency_links=dependency_links
+            'discobot = discobot.__main__:main'
+        ]
+    }
 )
