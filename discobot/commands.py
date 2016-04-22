@@ -1,7 +1,7 @@
 import re
 import os
 
-from discord import game
+from discord import game, utils
 
 from discobot import bot, constants
 
@@ -88,21 +88,22 @@ async def resume():
         bot.player.resume()
 
 
-@bot.command(pass_context=True)
+@bot.group(pass_context=True)
 async def aliases(ctx):
-    """Lists all aliases created by you."""
+    """Lists registered aliases."""
     aliases = {}
     for alias in bot.redis.smembers('aliases'):
         alias = alias.decode('utf-8')
         key = 'aliases:' + alias
-        if bot.redis.hget(key, 'discriminator') != \
-                ctx.message.author.discriminator.encode('utf-8'):
-            continue
-        aliases[alias] = bot.redis.hget(key, 'uri').decode('utf-8')
+        discriminator = bot.redis.hget(key, 'discriminator').decode('utf-8')
+        if ctx.subcommand_passed is None or \
+                ctx.subcommand_passed == discriminator:
+            aliases[alias] = bot.redis.hget(key, 'uri').decode('utf-8')
 
     if not aliases:
         await bot.say('No aliases found.')
     else:
+        # TODO: Do these need to be sorted?
         quote = ''
         for key, value in aliases.items():
             quote += '%s: %s\n' % (key, value)

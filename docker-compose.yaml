@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    discobot:
+        build: .
+        container_name: discobot
+        volumes:
+            - ./discobot:/usr/local/lib/python3.5/site-packages/discobot
+            - ./config.yaml:/config.yaml
+            - ./attachments:/attachments
+
+    discobot_db:
+        image: redis
+        container_name: discobot_db

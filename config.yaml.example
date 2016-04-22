@@ -1,16 +1,16 @@
-opus_library_path: "*** REPLACE ***"
+opus_library_path: /usr/lib/x86_64-linux-gnu/libopus.so.0
 
 log:
-    level: "info"
-    format: "%(asctime)s ::%(levelname)s:: %(message)s"
-    datefmt: "%Y-%m-%d %H:%M:%S"
+    level: info
+    format: '%(asctime)s ::%(levelname)s:: %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
 
 bot:
-    token: "*** REPLACE ***"
-    command_prefix: "commands.when_mentioned"
+    token:
+    command_prefix: commands.when_mentioned
 
 redis:
-    host: "127.0.0.1"
+    host: discobot_db
     port: 6379
     db: 0
 
@@ -22,9 +22,9 @@ youtube:
 
 soundcloud:
     enabled: true
-    client_id: "*** REPLACE ***"
+    client_id:
 
 spotify:
     enabled: false
-    username: "*** REPLACE ***"
-    password: "*** REPLACE ***"
+    username:
+    password:

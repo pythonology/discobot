@@ -8,6 +8,10 @@ with open('README.rst') as f:
 
 with open('requirements.txt') as f:
     install_requires = f.read().splitlines()
+
+    # install_requires cannot contain VCS links, which we use to get
+    # discord.py>=0.10.0. Once this version becomes available on PyPi,
+    # we can remove the following lines.
     for install_require in install_requires[:]:
         if install_require.startswith('git+'):
             install_requires.remove(install_require)
