@@ -3,6 +3,39 @@ Discobot: a fully-featured music bot for Discord
 ************************************************
 |pypi| |python| |license|
 
+===========
+Configuring
+===========
+Before you can run Discobot, you must first create a ``config.yaml`` file. Please refer to the `config.yaml.example <https://github.com/chandler14362/disco/blob/master/config.yaml.example>`_ file for reference.
+
+**NOTE:** If you are going to be running Discobot through Docker, you must leave the values of ``opus_library_path`` and ``redis`` as they are defined in the `config.yaml.example <https://github.com/chandler14362/disco/blob/master/config.yaml.example>`_ file.
+
+=======
+Running
+=======
+There are two ways in which you can run Discobot.
+
+Docker
+------
+This method is recommended, as it is the quickest, easiest, and most flexible.
+::
+    docker-compose up
+
+pip
+---
+This method requires you to first install the following dependencies:
+
+* FFmpeg
+* Redis
+
+Now, you may install Discobot through **pip**...
+::
+    pip install Discobot
+
+...and run it using:
+::
+    discobot
+
 ==========
 Change Log
 ==========
