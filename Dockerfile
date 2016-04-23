@@ -56,13 +56,8 @@ RUN git clone git://source.ffmpeg.org/ffmpeg.git /tmp/ffmpeg \
   && rm -rf /tmp/ffmpeg
 
 # Install discobot
-COPY . /tmp/discobot
-RUN cd /tmp/discobot \
-  && pip install . \
-  && pip install -r requirements.txt \
-  && cd /tmp \
-  && rm -rf /tmp/discobot
+COPY . /
+RUN pip install -r requirements.txt \
+  && rm -rf requirements.txt
 
-COPY config.yaml /config.yaml
-
-ENTRYPOINT ["discobot"]
+ENTRYPOINT ["python", "-m", "discobot"]

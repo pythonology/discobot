@@ -2,11 +2,6 @@
 __pycache__/
 *.pyc
 
-# Distribution / packaging
-build/
-dist/
-*.egg-info/
-
 # Virtual environments
 venv/
 
@@ -20,9 +15,12 @@ venv/
 # Mac directory info
 .DS_Store
 
-# Disco
+# Discobot
 attachments/
+config.yaml.example
 LICENSE
+README.rst
+CHANGELOG.rst
 
 # Git
 .gitignore

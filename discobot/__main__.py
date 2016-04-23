@@ -14,7 +14,7 @@ def main():
     """
     The main entry point.
 
-    Invoke using either `discobot` or `python -m discobot`.
+    Invoke using `python -m discobot`.
     """
     parser = argparse.ArgumentParser(
         prog='discobot', description=__doc__,

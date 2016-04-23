@@ -5,9 +5,9 @@ services:
         build: .
         container_name: discobot
         volumes:
-            - ./discobot:/usr/local/lib/python3.5/site-packages/discobot
-            - ./config.yaml:/config.yaml
+            - ./discobot:/discobot
             - ./attachments:/attachments
+            - ./config.yaml:/config.yaml
 
     discobot_db:
         image: redis

@@ -1,14 +1,20 @@
 import re
 import os
 
-from discord import game, utils
+from discord import game
 
-from discobot import bot, constants
+from discobot import bot, __version__, constants
+
+
+@bot.command()
+async def version():
+    """Responds with the version of Discobot that is being run."""
+    await bot.say(__version__)
 
 
 @bot.command(pass_context=True)
 async def join(ctx):
-    """Makes Disco join your current voice channel."""
+    """Makes Discobot join your current voice channel."""
     if ctx.message.author.voice_channel is None:
         return
     if bot.is_voice_connected():
