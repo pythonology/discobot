@@ -1,7 +1,7 @@
 ************************************************
 Discobot: a fully-featured music bot for Discord
 ************************************************
-|license|
+|release| |license|
 
 ===========
 Configuring
@@ -26,6 +26,10 @@ Please see the `CHANGELOG.rst <https://github.com/chandler14362/disco/blob/maste
 Licence
 =======
 Please see the `LICENSE <https://github.com/chandler14362/disco/blob/master/LICENSE>`_ file.
+
+.. |release| image:: https://img.shields.io/github/release/chandler14362/disco.svg?maxAge=2592000
+    :target: https://github.com/chandler14362/disco/releases/latest
+    :alt: Latest release
 
 .. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://raw.githubusercontent.com/chandler14362/disco/master/LICENSE
