@@ -27,11 +27,11 @@ Licence
 =======
 Please see the `LICENSE <https://github.com/pythonology/discobot/blob/master/LICENSE>`_ file.
 
-.. |release| image:: https://img.shields.io/github/release/pythonology/discobot.svg?maxAge=2592000
+.. |release| image:: https://img.shields.io/github/release/pythonology/discobot.svg
     :target: https://github.com/pythonology/discobot/releases/latest
     :alt: Latest Release
 
-.. |requirements| image:: https://requires.io/github/pythonology/discobot/requirements.svg?branch=master
+.. |requirements| image:: https://img.shields.io/requires/github/pythonology/discobot.svg
     :target: https://requires.io/github/pythonology/discobot/requirements/?branch=master
     :alt: Requirements Status
 
