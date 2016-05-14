@@ -1,7 +1,7 @@
 ************************************************
 Discobot: a fully-featured music bot for Discord
 ************************************************
-|release| |license|
+|release| |requirements| |license|
 
 ===========
 Configuring
@@ -29,7 +29,11 @@ Please see the `LICENSE <https://github.com/pythonology/discobot/blob/master/LIC
 
 .. |release| image:: https://img.shields.io/github/release/pythonology/discobot.svg?maxAge=2592000
     :target: https://github.com/pythonology/discobot/releases/latest
-    :alt: Latest release
+    :alt: Latest Release
+
+.. |requirements| image:: https://requires.io/github/pythonology/discobot/requirements.svg?branch=master
+    :target: https://requires.io/github/pythonology/discobot/requirements/?branch=master
+    :alt: Requirements Status
 
 .. |license| image:: https://img.shields.io/badge/license-MIT-blue.svg
     :target: https://raw.githubusercontent.com/pythonology/discobot/master/LICENSE

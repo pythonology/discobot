@@ -55,7 +55,6 @@ RUN git clone git://source.ffmpeg.org/ffmpeg.git /tmp/ffmpeg \
   && cd /tmp \
   && rm -rf /tmp/ffmpeg
 
-# Install discobot
 COPY . /
 RUN pip install -r requirements.txt \
   && rm -rf requirements.txt
