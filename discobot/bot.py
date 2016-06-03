@@ -49,30 +49,27 @@ class DiscoBot(commands.Bot):
         return player
 
     def play(self, player):
-        if not self.is_voice_connected():
-            return False
         if self.player is not None and self.player.is_playing():
             self.player.after = None
             self.player.stop()
         self.player = player
         self.player.start()
-        return True
 
     async def play_attachment(self, path, after=None):
         player = self.voice.create_ffmpeg_player(path, after=after)
-        if self.play(player):
-            basename = os.path.basename(path)
-            await self.change_status(game=game.Game(name=basename))
+        self.play(player)
+        basename = os.path.basename(path)
+        await self.change_status(game=game.Game(name=basename))
 
     async def play_youtube(self, url, after=None):
         player = await self.voice.create_ytdl_player(url, after=after)
-        if self.play(player):
-            await self.change_status(game=game.Game(name=self.player.title))
+        self.play(player)
+        await self.change_status(game=game.Game(name=self.player.title))
 
     async def play_soundcloud(self, url, after=None):
         player = self.create_soundcloud_player(url, after=after)
-        if self.play(player):
-            await self.change_status(game=game.Game(name=self.player.title))
+        self.play(player)
+        await self.change_status(game=game.Game(name=self.player.title))
 
     async def download_attachment(self, author, attachment):
         path = os.path.join('attachments', author.discriminator)

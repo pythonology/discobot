@@ -58,6 +58,6 @@ RUN git clone git://source.ffmpeg.org/ffmpeg.git /tmp/ffmpeg \
 COPY . /
 RUN pip install -r requirements.txt \
   && rm -rf requirements.txt \
-  && pip install git+https://github.com/Rapptz/discord.py@async
+  && pip install git+https://github.com/Rapptz/discord.py@329f916e10d2f40cae7e2039269b9e3f7ecd71cc
 
 ENTRYPOINT ["python", "-m", "discobot"]

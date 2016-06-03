@@ -15,17 +15,18 @@ async def version():
 @bot.command(pass_context=True)
 async def join(ctx):
     """Makes Discobot join your current voice channel."""
-    if ctx.message.author.voice_channel is None:
+    channel = ctx.message.author.voice_channel
+    if channel is None:
         return
-    if bot.is_voice_connected():
+    if bot.is_voice_connected(channel.server):
         await bot.voice.disconnect()
-    await bot.join_voice_channel(ctx.message.author.voice_channel)
+    await bot.join_voice_channel(channel)
 
 
-@bot.command()
-async def play(uri: str):
+@bot.command(pass_context=True)
+async def play(ctx, uri: str):
     """Plays the track of your choice."""
-    if not bot.is_voice_connected():
+    if not bot.is_voice_connected(ctx.message.server):
         return
 
     after = lambda: bot.loop.create_task(bot.change_status(game=game.Game()))
@@ -67,28 +68,28 @@ async def play(uri: str):
     await bot.say('Invalid URI.')
 
 
-@bot.command()
-async def stop():
+@bot.command(pass_context=True)
+async def stop(ctx):
     """Stops the currently playing track."""
-    if not bot.is_voice_connected():
+    if not bot.is_voice_connected(ctx.message.server):
         return
     if bot.player is not None:
         bot.player.stop()
 
 
-@bot.command()
-async def pause():
+@bot.command(pass_context=True)
+async def pause(ctx):
     """Pauses the currently playing track."""
-    if not bot.is_voice_connected():
+    if not bot.is_voice_connected(ctx.message.server):
         return
     if bot.player is not None:
         bot.player.pause()
 
 
-@bot.command()
-async def resume():
+@bot.command(pass_context=True)
+async def resume(ctx):
     """Resumes the currently playing track."""
-    if not bot.is_voice_connected():
+    if not bot.is_voice_connected(ctx.message.server):
         return
     if bot.player is not None:
         bot.player.resume()
